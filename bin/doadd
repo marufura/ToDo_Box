@@ -1,0 +1,96 @@
+#!/bin/sh
+
+error(){
+    printf '\e[31m%s\e[m' "Error : $1"
+    printf '\e[35m%s\e[m\n' "       -> Sorry, please try again"
+    exit 2
+}
+
+MEMOFLAG=FALSE
+OPT=
+while getopts m OPT
+do
+    case $OPT in
+        m) MEMOFLAG=TRUE ;;
+        \?) error 'Invalid Option' ;;
+    esac
+done
+shift `expr $OPTIND - 1`
+
+cp /Users/Marufura/storage/ToDoBox/ToDo/task /Users/Marufura/storage/ToDoBox/ToDo/task_before
+
+printf '%s \e[34m%s \e[m \n' '　　　名前' '[name]'
+read -p "           -> " NAME
+
+printf '%s \e[33m%s \e[mor \e[32m%s \e[m \n' '　　　期限' '[yy mm dd hr min]' '[no :n]'
+read -p "           -> " YY MM DD HR MIN
+
+#printf '\e[32m%s/%s/%s/%s/%s\e[m\n' $YY $MM $DD $HR $MIN
+
+if [ "$YY" = "n" ]
+then 
+    YY=2099; MM=99; DD=99; HR=99; MIN=99
+elif [ "$DD" = "" ]
+then
+    error 'Please input at least dd'
+else
+
+    if [ "$HR" = "" ]
+    then
+        HR=23 #default
+        MIN=59 #default
+    fi
+
+    if [ "$MIN" = "" ]
+    then
+        MIN=0 #default
+    fi
+
+    date -v${YY}y -v${MM}m -v${DD}d -v${HR}H -v${MIN}M > /dev/null 2>&1
+
+    if [ $? -gt 0 ]
+    then
+        error 'Invalid Date'
+    fi
+
+fi
+
+#printf '\e[32m%s/%s/%s/%s/%s\e[m\n' $YY $MM $DD $HR $MIN
+
+if [ "$YY" = "2099" ]
+then
+    REP=1
+else
+    printf '%s \e[32m%s \e[mor \e[32m%s \e[mor \e[32m%s \e[mor \e[32m%s \e[m \n' '繰り返す？' '[しない :1]' '[明日も :2]' '[来週も :3]' '[来月も :4]'
+    read -p "            -> " REP
+    case $REP in
+        [1234] ) : ;;
+        * ) error 'Invalid input' ;;
+    esac
+fi
+
+printf '%s \e[32m%s \e[mor \e[32m%s \e[mor \e[32m%s \e[mor \e[32m%s \e[m \n' '　　大変？' '[分からない :1]' '[簡単 :2]' '[普通 :3]' '[大変そう :4]'
+read -p "            -> " HARD
+case $HARD in
+    [1234] ) : ;;
+    * ) error 'Invalid input' ;;
+esac
+
+printf '%s \e[32m%s \e[mor \e[32m%s \e[m \n' '　　大切？' '[やらなければならない :1]' '[暇なときにやれば良い :2]'
+read -p "            -> " PRI
+case $PRI in
+    [12] ) : ;;
+    * ) error 'Invalid input' ;;
+esac
+
+MEMO=NOINPUT
+# echo $MEMOFLAG
+if [ "$MEMOFLAG" = "TRUE" ]
+then
+    printf '%s' '　備考など'
+    read -p "            -> " MEMO
+fi
+
+echo $NAME,$YY,$MM,$DD,$HR,$MIN,$REP,$HARD,$PRI,0,$MEMO >> /Users/Marufura/storage/ToDoBox/ToDo/task
+
+# .*,.*,.*,.*,.*,.*,.*,.*,.*,.*,.*

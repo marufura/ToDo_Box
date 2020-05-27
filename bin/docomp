@@ -1,0 +1,10 @@
+#!/bin/sh
+
+if [ "$1" = "" ]; then
+    printf '\e[31m%s\e[m' "         No name Error"
+    printf '\e[35m%s\e[m\n' "       -> Sorry, please try again"
+    exit 2
+fi
+
+cp /Users/Marufura/storage/ToDoBox/ToDo/task /Users/Marufura/storage/ToDoBox/ToDo/task_before
+/Users/Marufura/storage/ToDoBox/bin/comp_c /Users/Marufura/storage/ToDoBox/ToDo/task $1

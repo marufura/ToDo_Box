@@ -1,0 +1,8 @@
+#!/bin/zsh
+
+cp /Users/Marufura/storage/ToDoBox/ToDo/task /Users/Marufura/storage/ToDoBox/ToDo/task_before
+sed -ie "/^${1},/d" /Users/Marufura/storage/ToDoBox/ToDo/task 
+
+#echo $?
+#終了コードを用いて文字列が該当しない場合は知らせようかと思ったが仕様が分からないのでやめた
+

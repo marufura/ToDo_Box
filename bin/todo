@@ -1,0 +1,30 @@
+#!/bin/sh
+
+error(){
+    printf '\e[31m%s\e[m' "Error : $1"
+    printf '\e[35m%s\e[m\n' "       -> Sorry, please try again"
+    exit 2
+}
+
+ALLFLAG=0
+OPT=
+while getopts an OPT
+do
+    case $OPT in
+        a) ALLFLAG=1 ;;
+        n) /Users/Marufura/storage/ToDoBox/bin/new_terminal $ALLFLAG
+           exit 0 ;;
+        \?) error 'Invalid Option' ;;
+    esac
+done
+shift `expr $OPTIND - 1`
+
+COL=`tput cols`
+LINE=`tput lines`
+
+clear
+/Users/Marufura/storage/ToDoBox/bin/sorting_c /Users/Marufura/storage/ToDoBox/ToDo/task
+cp /Users/Marufura/storage/ToDoBox/ToDo/task /Users/Marufura/storage/ToDoBox/ToDo/task_before
+/Users/Marufura/storage/ToDoBox/bin/display_c /Users/Marufura/storage/ToDoBox/ToDo/task $ALLFLAG $COL $LINE
+
+exit 0

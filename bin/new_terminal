@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+set -e
+
+# Open new terminal.
+SOURCE="${BASH_SOURCE[0]}"
+DIR=$(pwd)
+if [[ "$(uname)" = "Darwin" ]] && [[ -z "$ON_NEW_TERMINAL" ]] && [[ -z "$NO_NEW_TERMINAL" ]] ; then
+    osascript -e "tell app \"Terminal\" to do script \"cd $DIR && export ON_NEW_TERMINAL=1 && $SOURCE\""
+    exit 0
+fi
+
+# Get the directory path and move it.
+while [ -h "$SOURCE" ] ; do SOURCE="$(readlink "$SOURCE")"; done
+DIR="$( cd -P "$( dirname "$SOURCE" )/" && pwd )"
+cd "$DIR"
+
+# Run your command...
+
+ALLFLAG=0
+if [ "$1" = "1" ]; then
+    ALLFLAG=1
+fi
+COL=`tput cols`
+LINE=`tput lines`
+
+clear
+/Users/Marufura/storage/ToDoBox/bin/sorting_c /Users/Marufura/storage/ToDoBox/ToDo/task 
+/Users/Marufura/storage/ToDoBox/bin/display_c /Users/Marufura/storage/ToDoBox/ToDo/task $ALLFLAG $COL $LINE
+
+exit 0

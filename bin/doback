@@ -1,0 +1,3 @@
+#!/bin/sh
+
+cp /Users/Marufura/storage/ToDoBox/ToDo/task_before /Users/Marufura/storage/ToDoBox/ToDo/task

@@ -1,0 +1,12 @@
+#!/bin/sh
+
+cp /Users/Marufura/storage/ToDoBox/ToDo/task /Users/Marufura/storage/ToDoBox/ToDo/task_before
+printf '\e[31m%s\e[m' 'Check [y/n] -> '
+read ANS
+
+if [ "$ANS" = y ]; then
+    printf "^^^^^\n" > /Users/Marufura/storage/ToDoBox/ToDo/task
+    printf '\e[35m%s\e[m\n' "Success : Box was cleared"
+else
+    printf '\e[35m%s\e[m\n' "This operation was canceled"
+fi
